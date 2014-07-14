@@ -16,7 +16,7 @@ var triggerSequence = function(e){
 
   countdown.begin()
     .then(cameras.capture)
-    .then(S3.remember)
+    .then(S3.rememberAwesome)
     .then(db.storeAwesome)
     .then(hooks.notify)
     .fail(handleError)

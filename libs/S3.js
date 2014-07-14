@@ -1,6 +1,14 @@
 var Q = require('q');
+var knox = require('knox');
 
-var remember = function(filePaths){
+var s3Client = knox.createClient({
+  key: process.env.S3_KEY,
+  secret: process.env.S3_SECRET,
+  bucket: 'air-guitar',
+});
+
+
+var rememberAwesome = function(filePaths){
   var deferred = Q.defer();
   var S3Paths = [];
 
@@ -17,6 +25,17 @@ var remember = function(filePaths){
 };
 
 
+var rememberSlowmo = function(filePath){
+  var deferred = Q.defer();
+
+  store(filePath, function(){
+    deferred.resolve(S3Paths);
+  });
+
+  return deferred.promise;
+};
+
+
 var store = function(file, next){
   console.log('storing', file, 'in S3...');
 
@@ -25,4 +44,6 @@ var store = function(file, next){
   }, 1000);
 };
 
-exports.remember = remember;
+
+exports.rememberAwesome = rememberAwesome;
+exports.rememberSlowmo = rememberSlowmo;
