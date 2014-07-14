@@ -28,7 +28,22 @@ var storeAwesome = function(filePaths){
   }, 1000);
 
   return deferred.promise;
-
 };
 
+
+var storeSlowmo = function(filePath){
+  var deferred = Q.defer();
+
+  slowmos.insert(
+    { videoUrl : filePath },
+    function(err, res){
+      deferred.resolve(res);
+    }
+  );
+
+  return deferred.promise;
+};
+
+
 exports.storeAwesome = storeAwesome;
+exports.storeSlowmo = storeSlowmo;
