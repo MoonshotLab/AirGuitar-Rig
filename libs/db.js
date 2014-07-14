@@ -1,5 +1,5 @@
 var Q = require('q');
-
+var MongoClient = require('mongodb').MongoClient;
 
 var awesomes = null;
 var slowmos = null;
