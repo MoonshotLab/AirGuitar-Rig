@@ -13,6 +13,17 @@ MongoClient.connect(process.env.DB_CONNECT, function(err, db){
 });
 
 
+var getNextShortcode = function(){
+  var deferred = Q.defer();
+
+  setTimeout(function(){
+    deferred.resolve('00001');
+  });
+
+  return deferred.promise;
+};
+
+
 var storeAwesome = function(filePaths){
   var deferred = Q.defer();
 
