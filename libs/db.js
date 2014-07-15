@@ -49,7 +49,7 @@ var storeSlowmo = function(obj){
   slowmos.insert(
     obj,
     function(err, res){
-      deferred.resolve(res);
+      deferred.resolve(obj.shortCode);
     }
   );
 
