@@ -3,7 +3,6 @@ var MongoClient = require('mongodb').MongoClient;
 
 var awesomes = null;
 var slowmos = null;
-var x = null;
 
 MongoClient.connect(process.env.DB_CONNECT, function(err, db){
   if(err) console.log('error connecting to db...', err);
@@ -58,7 +57,7 @@ var storeSlowmo = function(filePath){
 
 
 var padNumber = function(num, size){
-   var s = num+"";
+  var s = num+"";
   while (s.length < size) s = "0" + s;
   return s;
 };

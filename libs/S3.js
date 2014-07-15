@@ -27,21 +27,23 @@ var rememberAwesome = function(filePaths){
 
 var rememberSlowmo = function(filePath){
   var deferred = Q.defer();
+  var parts = filePath.split('/');
+  var remotePath = '/' + parts[parts.length - 1];
 
-  store(filePath, function(){
-    deferred.resolve(S3Paths);
+  store(filePath, remotePath, function(s3Path){
+    deferred.resolve(s3Path);
   });
 
   return deferred.promise;
 };
 
 
-var store = function(file, next){
-  console.log('storing', file, 'in S3...');
-
-  setTimeout(function(){
-    next(file);
-  }, 1000);
+var store = function(fileToSave, S3Path, next){
+  console.log('storing', fileToSave, 'in S3...');
+  s3Client.putFile(fileToSave, S3Path, function(err, res){
+    if(err) console.log('error storing file...');
+    else next(S3Path);
+  });
 };
 
 
