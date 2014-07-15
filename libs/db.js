@@ -4,20 +4,29 @@ var MongoClient = require('mongodb').MongoClient;
 var awesomes = null;
 var slowmos = null;
 
-MongoClient.connect(process.env.DB_CONNECT, function(err, db){
-  if(err) console.log('error connecting to db...', err);
-  else console.log('connected to db...');
+var connect = function(){
+  var deferred = Q.defer();
+  console.log('connecting to db...');
 
-  slowmos = db.collection('slowmos');
-  awesomes = db.collection('awesomes');
-});
+  MongoClient.connect(process.env.DB_CONNECT, function(err, db){
+    if(err) console.log('error connecting to db...', err);
+    else console.log('connected to db...');
+
+    slowmos = db.collection('slowmos');
+    awesomes = db.collection('awesomes');
+
+    deferred.resolve();
+  });
+
+  return deferred.promise;
+};
 
 
-var getNextShortcode = function(){
+var getNextShortCode = function(){
   var deferred = Q.defer();
 
   slowmos.count(function(err, count){
-    deferred.resolve(padNumber(count, 5));
+    deferred.resolve(padNumber(count+1, 5));
   });
 
   return deferred.promise;
@@ -64,6 +73,7 @@ var padNumber = function(num, size){
 };
 
 
+exports.connect = connect;
 exports.storeAwesome = storeAwesome;
 exports.storeSlowmo = storeSlowmo;
-exports.getNextShortCode = getNextShortcode;
+exports.getNextShortCode = getNextShortCode;

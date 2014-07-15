@@ -2,14 +2,23 @@ var fs = require('fs');
 var path = require('path');
 var Q = require('q');
 var GoPro = require('gopro_hero_api/libs/gopro');
-var camera = new GoPro(process.env.GOPRO_PASS, '10.5.5.9', '8080');
+var camera = null;
 
 
 var connect = function(){
   var deferred = Q.defer();
-  camera.ready().then(deferred.resolve).catch(function(){
+
+  console.log('connecting to gopro...');
+  camera = new GoPro(process.env.GOPRO_PASS, '10.5.5.9', '8080');
+
+  camera.ready().then(function(){
+    console.log('connected to gopro...');
+    deferred.resolve();
+  }).catch(function(){
     console.log('could not connect to camera.');
+    deferred.resolve();
   });
+
   return deferred.promise;
 };
 
