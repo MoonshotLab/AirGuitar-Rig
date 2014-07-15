@@ -4,9 +4,9 @@
 // 3. Do the captures get saved to S3 and Mongo?
 // 4. Does it report to the web service?
 
-var S3 = require('./libs/S3');
-var db = require('./libs/db');
-var hooks = require('./libs/hooks');
+var S3 = require('../libs/S3');
+var db = require('../libs/db');
+var hooks = require('../libs/hooks');
 var gopro = null;
 
 
@@ -30,7 +30,7 @@ var handleError = function(e){
 
 db.connect()
   .then(function(){
-    gopro = require('./libs/gopro');
+    gopro = require('../libs/gopro');
     gopro.connect()
       .then(db.getNextShortCode)
       .then(makeSlowmo);
