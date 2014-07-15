@@ -3,6 +3,7 @@ var MongoClient = require('mongodb').MongoClient;
 
 var awesomes = null;
 var slowmos = null;
+var x = null;
 
 MongoClient.connect(process.env.DB_CONNECT, function(err, db){
   if(err) console.log('error connecting to db...', err);
@@ -16,8 +17,8 @@ MongoClient.connect(process.env.DB_CONNECT, function(err, db){
 var getNextShortcode = function(){
   var deferred = Q.defer();
 
-  setTimeout(function(){
-    deferred.resolve('00001');
+  slowmos.count(function(err, count){
+    deferred.resolve(padNumber(count, 5));
   });
 
   return deferred.promise;
@@ -56,5 +57,13 @@ var storeSlowmo = function(filePath){
 };
 
 
+var padNumber = function(num, size){
+   var s = num+"";
+  while (s.length < size) s = "0" + s;
+  return s;
+};
+
+
 exports.storeAwesome = storeAwesome;
 exports.storeSlowmo = storeSlowmo;
+exports.getNextShortCode = getNextShortcode;
