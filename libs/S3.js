@@ -28,21 +28,25 @@ var rememberAwesome = function(filePaths){
 var rememberSlowmo = function(filePath){
   var deferred = Q.defer();
   var parts = filePath.split('/');
+  var shortCode = parts[parts.length - 1].replace('.mp4', '');
   var remotePath = '/' + parts[parts.length - 1];
 
   store(filePath, remotePath, function(s3Path){
-    deferred.resolve(s3Path);
+    deferred.resolve({
+      shortCode: shortCode,
+      url: s3Path
+    });
   });
 
   return deferred.promise;
 };
 
 
-var store = function(fileToSave, S3Path, next){
+var store = function(fileToSave, relativeS3Path, next){
   console.log('storing', fileToSave, 'in S3...');
-  s3Client.putFile(fileToSave, S3Path, function(err, res){
+  s3Client.putFile(fileToSave, relativeS3Path, function(err, res){
     if(err) console.log('error storing file...');
-    else next(S3Path);
+    else next('https://s3.amazonaws.com/air-guitar' + relativeS3Path);
   });
 };
 

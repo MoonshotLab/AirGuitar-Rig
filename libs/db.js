@@ -42,11 +42,12 @@ var storeAwesome = function(filePaths){
 };
 
 
-var storeSlowmo = function(filePath){
+var storeSlowmo = function(obj){
   var deferred = Q.defer();
 
+  console.log('saving slowmo in database...');
   slowmos.insert(
-    { videoUrl : filePath },
+    obj,
     function(err, res){
       deferred.resolve(res);
     }
