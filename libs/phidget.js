@@ -7,7 +7,7 @@ var pinMapping = {
   },
   'indicators' : {
     'ready' : 3,
-    'busy' : 2,
+    'recording' : 2,
     'uploading' : 1
   }
 };
@@ -35,9 +35,9 @@ phidget.on('input', function(boardId, inputId, state){
   var buttons = pinMapping.buttons;
 
   if(inputId == buttons.next && state == 1)
-    emitter.emit('trigger', { directive: 'next' });
+    emitter.emit('next-song');
   else if(inputId === buttons.prev && state == 1)
-    emitter.emit('trigger', { directive: 'select' });
+    emitter.emit('select-song');
 });
 
 
