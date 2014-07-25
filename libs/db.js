@@ -1,7 +1,7 @@
 var Q = require('q');
 var MongoClient = require('mongodb').MongoClient;
 
-var awesomes = null;
+
 var slowmos = null;
 
 var connect = function(){
@@ -13,7 +13,6 @@ var connect = function(){
     else console.log('connected to db...');
 
     slowmos = db.collection('slowmos');
-    awesomes = db.collection('awesomes');
 
     deferred.resolve();
   });
@@ -28,24 +27,6 @@ var getNextShortCode = function(){
   slowmos.count(function(err, count){
     deferred.resolve(padNumber(count+1, 5));
   });
-
-  return deferred.promise;
-};
-
-
-var storeAwesome = function(filePaths){
-  var deferred = Q.defer();
-
-  var record = {
-    index: 0,
-    files: filePaths
-  };
-
-  console.log('saving record at index ' + record.index + '...');
-
-  setTimeout(function(){
-    deferred.resolve(record);
-  }, 1000);
 
   return deferred.promise;
 };
@@ -74,6 +55,5 @@ var padNumber = function(num, size){
 
 
 exports.connect = connect;
-exports.storeAwesome = storeAwesome;
 exports.storeSlowmo = storeSlowmo;
 exports.getNextShortCode = getNextShortCode;

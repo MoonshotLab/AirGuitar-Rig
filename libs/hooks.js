@@ -2,18 +2,6 @@ var Q = require('q');
 var needle = require('needle');
 
 
-var notifyAwesome = function(){
-  var deferred = Q.defer();
-
-  console.log('notifying web app of new awesome...');
-  setTimeout(function(){
-    deferred.resolve({success: true});
-  }, 1000);
-
-  return deferred.promise;
-};
-
-
 var notifySlowmo = function(shortCode){
   var deferred = Q.defer();
   var params = [
@@ -34,5 +22,4 @@ var notifySlowmo = function(shortCode){
 };
 
 
-exports.notifyAwesome = notifyAwesome;
 exports.notifySlowmo = notifySlowmo;

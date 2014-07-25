@@ -1,4 +1,3 @@
-var cameras = require('./libs/cameras');
 var phidget = require('./libs/phidget');
 var music = require('./libs/music');
 var S3 = require('./libs/S3');
@@ -18,32 +17,14 @@ var triggerSequence = function(e){
   countdown.begin()
     .then(db.getNextShortCode)
     .then(function(shortCode){
-      makeAwesome(shortCode);
-      makeSlowmo(shortCode);
+      gopro.capture(shortCode, 3000)
+        .then(S3.rememberSlowmo)
+        .then(db.storeSlowmo)
+        .then(hooks.notifySlowmo)
+        .then(gopro.deleteCaptures)
+        .done(process.exit)
+        .fail(handleError);
     });
-};
-
-
-var makeSlowmo = function(shortCode){
-  console.log('maiking a slowmo...');
-  gopro.capture(shortCode, 3000)
-    .then(S3.rememberSlowmo)
-    .then(db.storeSlowmo)
-    .then(hooks.notifySlowmo)
-    .then(gopro.deleteCaptures)
-    .done(process.exit)
-    .fail(handleError);
-};
-
-
-var makeAwesome = function(shortCode){
-  console.log('making an awesome...');
-  cameras.capture(shortCode)
-    .then(S3.rememberAwesome)
-    .then(db.storeAwesome)
-    .then(hooks.notifyAwesome)
-    .fail(handleError)
-    .done(reset);
 };
 
 
@@ -61,8 +42,6 @@ var handleError = function(e){
 
 
 var connect = function(){
-  cameras.connect().then(reset);
-
   db.connect()
     .then(function(){
       gopro = require('./libs/gopro');

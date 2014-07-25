@@ -8,23 +8,6 @@ var s3Client = knox.createClient({
 });
 
 
-var rememberAwesome = function(filePaths){
-  var deferred = Q.defer();
-  var S3Paths = [];
-
-  filePaths.forEach(function(file){
-    store(file, function(newPath){
-      S3Paths.push(newPath);
-
-      if(S3Paths.length == filePaths.length)
-        deferred.resolve(S3Paths);
-    });
-  });
-
-  return deferred.promise;
-};
-
-
 var rememberSlowmo = function(filePath){
   var deferred = Q.defer();
   var parts = filePath.split('/');
@@ -51,5 +34,4 @@ var store = function(fileToSave, relativeS3Path, next){
 };
 
 
-exports.rememberAwesome = rememberAwesome;
 exports.rememberSlowmo = rememberSlowmo;
