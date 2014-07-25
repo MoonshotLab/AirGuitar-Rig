@@ -33,5 +33,3 @@ var lookup = function(phidgetId){
 
   return selectedSong;
 };
-
-exports.lookup = lookup;
