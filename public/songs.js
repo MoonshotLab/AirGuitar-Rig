@@ -1,23 +1,23 @@
 var songs = [
   {
-    "phidgetId": "0",
     "artist": "Eddie Van Halen",
-    "song": "Hot for Teacher"
+    "title": "Hot for Teacher",
+    "src" : ""
   },
   {
-    "phidgetId": "1",
     "artist": "Joan Jett",
-    "song": "I Love Rock `n` Roll"
+    "title": "I Love Rock `n` Roll",
+    "src" : ""
   },
   {
-    "phidgetId": "2",
     "artist": "The Rolling Stones",
-    "song": "Paint it Black"
+    "title": "Paint it Black",
+    "src" : ""
   },
   {
-    "phidgetId": "3",
     "artist": "AC/DC",
-    "song": "You Shook Me All Night Long"
+    "title": "You Shook Me All Night Long",
+    "src" : ""
   }
 ];
 
@@ -32,4 +32,20 @@ var lookup = function(phidgetId){
   });
 
   return selectedSong;
+};
+
+
+var buildSongTemplates = function(){
+  songs.forEach(function(song, i){
+    var klass = '';
+    if(i === 0) klass = 'selected';
+    var template = [
+      '<div data-src="' + song.src + '" class="song ' + klass + '">',
+        '<h1>' + song.title + '</h1>',
+        '<h2>' + song.artist + '</h2>',
+      '</div>'
+    ].join('');
+
+    $('#songs').append(template);
+  });
 };

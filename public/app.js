@@ -1,13 +1,24 @@
 var socket = io();
-socket.on('message', function(data){
-  console.log(data);
+socket.on('next-song', function(data){
+  nextSong();
 });
+
 
 $(function(){
-  console.log('zepto loaded...');
+  buildSongTemplates();
 });
 
 
-setTimeout(function(){
-  socket.emit('start-capture');
-}, 5000);
+var nextSong = function(){
+  var index = $('#songs').find('.song').index('.selected');
+  var nextIndex = index+1;
+
+  if(nextIndex > $('#songs').find('.song').length - 1)
+    nextIndex = 0;
+
+  var $thisSong = $($('#songs').find('.song')[index]);
+  var $nextSong = $($('#songs').find('.song')[nextIndex]);
+
+  $thisSong.removeClass('selected');
+  $nextSong.addClass('selected');
+};
