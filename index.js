@@ -1,3 +1,22 @@
+var express = require('express');
+var app = express();
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
+
+app.use(express.static(__dirname + '/public'));
+
+io.on('connection', function(socket){
+  socket.emit('message', {foo: 'bar'});
+});
+
+app.get('/', function(req, res){
+  res.sendfile('/public/index.html');
+});
+
+http.listen(3001, function(){
+  console.log('web serve ready and listening on port 3001');
+});
+
 var phidget = require('./libs/phidget');
 var music = require('./libs/music');
 var S3 = require('./libs/S3');
