@@ -41,6 +41,7 @@ var selectSong = function(){
 var startCountdown = function(){
   $('#songs').removeClass('show');
   $('#countdown').addClass('show');
+  socket.emit('prep-stage');
 
   setTimeout(function(){
     $('#count').text('4');
@@ -56,8 +57,16 @@ var startCountdown = function(){
   }, 4000);
   setTimeout(function(){
     $('#count').text('ROCK OUT!');
-    socket.emit('start-capture');
   }, 5000);
+
+  setTimeout(function(){
+    socket.emit('rock-out');
+  }, 7000);
+
+  setTimeout(function(){
+    socket.emit('clean-stage');
+    location.reload();
+  }, 15000);
 };
 
 
@@ -65,6 +74,3 @@ var startCountdown = function(){
 var socket = io();
 socket.on('next-song', nextSong);
 socket.on('select-song', selectSong);
-socket.on('stop-song', function(){
-  location.reload();
-});

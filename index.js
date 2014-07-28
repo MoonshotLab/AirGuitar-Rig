@@ -6,16 +6,24 @@ var hooks = require('./libs/hooks');
 var gopro = null;
 
 
-var triggerSequence = function(e){
+var prepStage = function(){
+  phidget.switchFans('on');
+  phidget.switchLights('on');
+};
 
+
+var cleanStage = function(){
+  phidget.switchFans('off');
+  phidget.switchLights('off');
+};
+
+
+var triggerSequence = function(){
   db.getNextShortCode().then(function(shortCode){
     phidget.setIndicator('recording');
-    phidget.switchFans('on');
-    phidget.switchLights('on');
-    gopro.capture(shortCode, 3000)
+    gopro.capture(shortCode, 4000)
       .then(function(){
         phidget.setIndicator('uploading');
-        web.stopSong();
         S3.rememberSlowmo(shortCode)
           .then(db.storeSlowmo)
           .then(hooks.notifySlowmo)
@@ -29,8 +37,7 @@ var triggerSequence = function(e){
 
 var reset = function(){
   console.log('resetting...');
-  phidget.switchFans('off');
-  phidget.switchLights('off');
+  cleanStage();
   phidget.setIndicator('ready');
 };
 
@@ -57,7 +64,10 @@ var connect = function(){
 };
 
 
-web.events.on('start-capture', triggerSequence);
+web.events.on('prep-stage', prepStage);
+web.events.on('clean-stage', cleanStage);
+web.events.on('rock-out', triggerSequence);
+
 phidget.events.on('next-song', web.nextSong);
 phidget.events.on('select-song', web.selectSong);
 phidget.events.on('ready', connect);

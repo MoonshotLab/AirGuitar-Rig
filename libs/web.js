@@ -10,8 +10,14 @@ var assetsPath = path.join(__dirname, '../', 'public');
 app.use(express.static(assetsPath));
 
 io.on('connection', function(socket){
-  socket.on('start-capture', function(){
-    emitter.emit('start-capture');
+  socket.on('prep-stage', function(){
+    emitter.emit('prep-stage');
+  });
+  socket.on('clean-stage', function(){
+    emitter.emit('clean-stage');
+  });
+  socket.on('rock-out', function(){
+    emitter.emit('rock-out');
   });
 });
 
@@ -34,12 +40,6 @@ exports.selectSong = function(){
 exports.nextSong = function(){
   console.log('next song...');
   io.sockets.emit('next-song');
-};
-
-
-exports.stopSong = function(){
-  console.log('stopping song...');
-  io.sockets.emit('stop-song');
 };
 
 
