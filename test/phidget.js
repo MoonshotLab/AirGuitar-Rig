@@ -24,8 +24,8 @@ phidget.events.on('ready', function(){
   }, 10000);
 
   setTimeout(function(){
-    phidget.switchFans('offf');
-    phidget.switchLights('offf');
+    phidget.switchFans('off');
+    phidget.switchLights('off');
   }, 20000);
 });
 
