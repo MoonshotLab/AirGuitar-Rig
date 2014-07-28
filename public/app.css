@@ -9,15 +9,30 @@ html, body{
 
 body{
   background-color: black;
-  font-family: 'Arimo', sans-serif;
+  font-family: 'Helvetica', sans-serif;
   color: white;
 }
 
 
 section.screen{
+  top: 0;
+  left: 100%;
   width: 100%;
   height: 100%;
   position: absolute;
+  -webkit-transition: .2s ease-out all;
+  background-color: black;
+  color: white;
+}
+
+section.screen.show{
+  left: 0%;
+}
+
+
+section.screen#songs.highlight{
+  background-color: white;
+  color: black;
 }
 
 
@@ -25,7 +40,7 @@ section.screen .song{
   text-align: center;
   width: 100%;
   height: 100%;
-  -webkit-transition: .25s linear all;
+  -webkit-transition: .25s ease-out all;
   -webkit-transform: scale(0);
   top: 20%;
   position: absolute;
@@ -49,4 +64,13 @@ h1{
 
 h2{
   font-size: 200%;
+}
+
+#count{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  text-align: center;
+  font-size: 1400%;
+  font-weight: bold;
 }

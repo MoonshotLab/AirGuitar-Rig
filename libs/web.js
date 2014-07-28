@@ -1,5 +1,4 @@
 var EE = require('events').EventEmitter;
-var phidget = require('../libs/phidget');
 var path = require('path');
 var express = require('express');
 var app = express();
@@ -35,6 +34,12 @@ exports.selectSong = function(){
 exports.nextSong = function(){
   console.log('next song...');
   io.sockets.emit('next-song');
+};
+
+
+exports.stopSong = function(){
+  console.log('stopping song...');
+  io.sockets.emit('stop-song');
 };
 
 

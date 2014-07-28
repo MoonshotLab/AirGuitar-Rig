@@ -13,11 +13,12 @@ var triggerSequence = function(e){
     gopro.capture(shortCode, 3000)
       .then(function(){
         phidget.setIndicator('uploading');
+        web.stopSong();
         S3.rememberSlowmo(shortCode)
           .then(db.storeSlowmo)
           .then(hooks.notifySlowmo)
           .then(gopro.deleteCaptures)
-          .done(process.exit)
+          .then(reset)
           .fail(handleError);
       });
   });
@@ -43,6 +44,7 @@ var connect = function(){
       gopro.connect()
         .then(function(){
           console.log('All Systems Ready...');
+          reset();
         });
     })
     .fail(function(e){
