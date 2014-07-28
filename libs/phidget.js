@@ -12,6 +12,7 @@ var pinMapping = {
   }
 };
 
+var phidgetConnected = false;
 var phidgetsLib = require('phidgets');
 var EE = require('events').EventEmitter;
 
@@ -22,6 +23,7 @@ var phidget = new phidgetsLib();
 console.log('waiting for phidget to come online...');
 phidget.connect(function(x){
   console.log('phidget online...');
+  phidgetConnected = true;
   emitter.emit('ready');
 });
 
@@ -34,9 +36,9 @@ phidget.on('error', function(error){
 phidget.on('input', function(boardId, inputId, state){
   var buttons = pinMapping.buttons;
 
-  if(inputId == buttons.next && state == 1)
+  if(inputId == buttons.next && state == 1 && phidgetConnected === true)
     emitter.emit('next-song');
-  else if(inputId === buttons.prev && state == 1)
+  else if(inputId === buttons.prev && state == 1 && phidgetConnected === true)
     emitter.emit('select-song');
 });
 
