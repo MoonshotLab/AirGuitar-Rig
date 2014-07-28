@@ -10,6 +10,8 @@ var triggerSequence = function(e){
 
   db.getNextShortCode().then(function(shortCode){
     phidget.setIndicator('recording');
+    phidget.switchFans('on');
+    phidget.switchLights('on');
     gopro.capture(shortCode, 3000)
       .then(function(){
         phidget.setIndicator('uploading');
@@ -27,6 +29,8 @@ var triggerSequence = function(e){
 
 var reset = function(){
   console.log('resetting...');
+  phidget.switchFans('off');
+  phidget.switchLights('off');
   phidget.setIndicator('ready');
 };
 
