@@ -28,12 +28,7 @@ var selectSong = function(){
       $('#songs').removeClass('highlight');
     }, 100);
 
-    setTimeout(function(){
-      $('#songs').removeClass('active');
-      $('#countdown').addClass('active');
-    }, 500);
-
-    setTimeout(startCountdown, 750);
+    setTimeout(startCountdown, 250);
   }
 };
 
@@ -43,30 +38,16 @@ var startCountdown = function(){
   $('#countdown').addClass('show');
   socket.emit('prep-stage');
 
-  setTimeout(function(){
-    $('#count').text('4');
-  }, 1000);
-  setTimeout(function(){
-    $('#count').text('3');
-  }, 2000);
-  setTimeout(function(){
-    $('#count').text('2');
-  }, 3000);
-  setTimeout(function(){
-    $('#count').text('1');
-  }, 4000);
-  setTimeout(function(){
-    $('#count').text('ROCK OUT!');
-  }, 5000);
-
-  setTimeout(function(){
+  var video = $('#countdown').find('video')[0];
+  video.onended = function(e) {
     socket.emit('rock-out');
-  }, 7000);
 
-  setTimeout(function(){
-    socket.emit('clean-stage');
-    location.reload();
-  }, 15000);
+    setTimeout(function(){
+      socket.emit('clean-stage');
+      location.reload();
+    }, 15000);
+  };
+  video.play();
 };
 
 

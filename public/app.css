@@ -29,6 +29,9 @@ section.screen.show{
   left: 0%;
 }
 
+section.screen#countdown video{
+  width: 100%;
+}
 
 section.screen#songs.highlight{
   background-color: white;
