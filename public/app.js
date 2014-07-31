@@ -134,7 +134,7 @@ var startCountdown = function(){
 var socket = io();
 socket.on('select-song', selectSong);
 socket.on('next-song', function(){
-  if($('section.screen.show').attr('id') == 'instructions')
+  if($('section.screen.show').attr('id') == 'intro')
     showSongSelector();
   else
     nextSong();
