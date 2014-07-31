@@ -20,7 +20,6 @@ section.screen{
   width: 100%;
   height: 100%;
   position: absolute;
-  -webkit-transition: .2s ease-out all;
   background-color: black;
   color: white;
 }
@@ -48,8 +47,47 @@ section.screen .song{
   top: 20%;
   position: absolute;
   opacity: 0;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center center;
 }
 
+.song.sabotage{
+  background-image: url('/song-selections/01_BeastieBoys_Static.png');
+}
+.song.barracuda{
+  background-image: url('/song-selections/02_Heart_Static.png');
+}
+.song.paradise{
+  background-image: url('/song-selections/03_GNR_Static.png');
+}
+.song.crazy{
+  background-image: url('/song-selections/04_Prince_Static.png');
+}
+.song.love{
+  background-image: url('/song-selections/05_Darkness_Static.png');
+}
+.song.rock{
+  background-image: url('/song-selections/06_JJett_Static.png');
+}
+.song.sabotage.select{
+  background-image: url('/song-selections/01_BeastieBoys_Select.png');
+}
+.song.barracuda.select{
+  background-image: url('/song-selections/02_Heart_Select.png');
+}
+.song.paradise.select{
+  background-image: url('/song-selections/03_GNR_Select.png');
+}
+.song.crazy.select{
+  background-image: url('/song-selections/04_Prince_Select.png');
+}
+.song.love.select{
+  background-image: url('/song-selections/05_Darkness_Select.png');
+}
+.song.rock.select{
+  background-image: url('/song-selections/06_JJett_Select.png');
+}
 
 section.screen .song.selected{
   -webkit-transform: scale(1);

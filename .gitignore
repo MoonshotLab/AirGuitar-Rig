@@ -3,3 +3,4 @@ node_modules
 env_vars
 *.mp4
 *.mp3
+public/song-selections/*.png
