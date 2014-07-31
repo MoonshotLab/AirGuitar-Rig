@@ -38,10 +38,6 @@ var getNextShortCode = function(){
       }
     );
 
-  slowmos.count(function(err, count){
-    deferred.resolve();
-  });
-
   return deferred.promise;
 };
 
