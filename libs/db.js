@@ -24,8 +24,22 @@ var connect = function(){
 var getNextShortCode = function(){
   var deferred = Q.defer();
 
+  slowmos
+    .find()
+    .sort({ _id : 1 })
+    .toArray(
+      function(err, results){
+        if(err) deferred.reject(results);
+        else {
+          var currentMax = parseInt(results[results.length - 1].shortCode);
+          var shortCode = padNumber(currentMax+1, 5);
+          deferred.resolve(shortCode);
+        }
+      }
+    );
+
   slowmos.count(function(err, count){
-    deferred.resolve(padNumber(count+1, 5));
+    deferred.resolve();
   });
 
   return deferred.promise;
