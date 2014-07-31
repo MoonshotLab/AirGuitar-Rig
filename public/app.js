@@ -1,5 +1,5 @@
 var isRecording = false;
-var selectedSong = null;
+var selectedAudio = null;
 
 $(function(){
   buildSongTemplates();
@@ -76,29 +76,32 @@ var selectSong = function(){
   if(!isRecording){
     isRecording = true;
 
+    // Find the Selected Audio
     var index = $('#song-selector').find('.song').index('.selected');
-    selectedSong = $('#audio-clips').find('audio')[index];
-    selectedSong.pause();
-    selectedSong.currentTime = 0;
+    selectedAudio = $('#audio-clips').find('audio')[index];
 
-    $('#song-selector').addClass('highlight');
-    setTimeout(function(){
-      $('#song-selector').removeClass('highlight');
-    }, 100);
+    // Highlight the Interface Song
+    var $selectedSong = $($('#song-selector').find('.song')[index]);
+    $selectedSong.addClass('select');
 
-    setTimeout(function(){
-      selectedSong.volume = 0;
-      selectedSong.play();
-      fadeIn(selectedSong, 3000);
-    }, 1000);
+    // Fade it out, cause it's prolly playing
+    fadeOut(selectedAudio, 100, function(){
+      selectedAudio.pause();
+      selectedAudio.currentTime = 0;
 
-    setTimeout(startCountdown, 250);
+      setTimeout(startCountdown, 250);
+    });
   }
 };
 
 
 
 var startCountdown = function(){
+  // Fade in the selected song
+  selectedAudio.volume = 0;
+  selectedAudio.play();
+  fadeIn(selectedAudio, 3000);
+
   $('#song-selector').removeClass('show');
   $('#countdown').addClass('show');
   socket.emit('prep-stage');
@@ -108,7 +111,7 @@ var startCountdown = function(){
     socket.emit('rock-out');
 
     setTimeout(function(){
-      fadeOut(selectedSong, 500, function(){
+      fadeOut(selectedAudio, 500, function(){
         socket.emit('clean-stage');
         location.reload();
       });
