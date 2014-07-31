@@ -13,7 +13,7 @@ var notifySlowmo = function(shortCode){
 
   console.log('notifying web app of new slowmo...');
 
-  needle.post('http://localhost:3000/slowmo', params, {}, function(err, res, body){
+  needle.post('http://share-guitar.com/slowmo', params, {}, function(err, res, body){
     if(body.success) deferred.resolve(body);
     else deferred.reject(body);
   });

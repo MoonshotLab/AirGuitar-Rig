@@ -11,7 +11,7 @@ var prepStage = function(){
 
   setTimeout(function(){
     phidget.switchLights('on');
-  }, 8000);
+  }, 9000);
 };
 
 
