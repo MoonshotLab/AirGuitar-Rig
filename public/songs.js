@@ -1,51 +1,56 @@
 var songs = [
   {
-    "artist": "Eddie Van Halen",
-    "title": "Hot for Teacher",
-    "src" : ""
+    "artist": "Beastie Boys",
+    "title": "Sabotage",
+    "src" : "BEASTIE_BOYS_SABOTAGE.mp3"
+  },
+  {
+    "artist": "The Darkness",
+    "title": "I Believe in a thing called love",
+    "src" : "DARKNESS_THING_CALLED_LOVE.mp3"
+  },
+  {
+    "artist": "Guns and Roses",
+    "title": "Paradise City",
+    "src" : "GNR_PARADISE.mp3"
+  },
+  {
+    "artist": "Heart",
+    "title": "Barracuda",
+    "src" : "HEART_BARRACUDA.mp3"
   },
   {
     "artist": "Joan Jett",
-    "title": "I Love Rock `n` Roll",
-    "src" : ""
+    "title": "I Love Rock and Roll",
+    "src" : "JOAN_JETT_I_LOVE_ROCKNROLL.mp3"
   },
   {
-    "artist": "The Rolling Stones",
-    "title": "Paint it Black",
-    "src" : ""
-  },
-  {
-    "artist": "AC/DC",
-    "title": "You Shook Me All Night Long",
-    "src" : ""
+    "artist": "Prince",
+    "title": "Let's Go Crazy",
+    "src" : "PRINCE_LETS_GO_CRAZY.mp3"
   }
 ];
-
-
-var lookup = function(phidgetId){
-  var selectedSong = songs[0];
-
-  songs.forEach(function(song){
-    if(song.phidgetId == phidgetId){
-      selectedSong = song;
-    }
-  });
-
-  return selectedSong;
-};
 
 
 var buildSongTemplates = function(){
   songs.forEach(function(song, i){
     var klass = '';
+
     if(i === 0) klass = 'selected';
-    var template = [
-      '<div data-src="' + song.src + '" class="song ' + klass + '">',
+    var songTemplate = [
+      '<div data-src="/songs/' + song.src + '" class="song ' + klass + '">',
         '<h1>' + song.title + '</h1>',
         '<h2>' + song.artist + '</h2>',
       '</div>'
     ].join('');
 
-    $('#songs').append(template);
+    var audioTemplate = [
+      '<audio>',
+        '<source src="/songs/' + song.src + ' "/>',
+      '</audio>'
+    ].join('');
+
+    $('#song-selector').append(songTemplate);
+    $('#audio-clips').append(audioTemplate);
   });
 };
