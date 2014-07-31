@@ -100,10 +100,11 @@ var startCountdown = function(){
   // Fade in the selected song
   selectedAudio.volume = 0;
   selectedAudio.play();
-  fadeIn(selectedAudio, 3000);
+  fadeIn(selectedAudio, 1000);
 
   $('#song-selector').removeClass('show');
   $('#countdown').addClass('show');
+  
   socket.emit('prep-stage');
 
   var video = $('#countdown').find('video')[0];
@@ -115,7 +116,7 @@ var startCountdown = function(){
         socket.emit('clean-stage');
         location.reload();
       });
-    }, 3000);
+    }, 15000);
   };
   video.play();
 };

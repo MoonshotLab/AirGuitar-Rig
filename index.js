@@ -8,7 +8,10 @@ var gopro = null;
 
 var prepStage = function(){
   phidget.switchFans('on');
-  phidget.switchLights('on');
+
+  setTimeout(function(){
+    phidget.switchLights('on');
+  }, 8000);
 };
 
 
