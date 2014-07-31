@@ -33,7 +33,7 @@ var fadeOut = function(el, speed, next){
 
 
 var showSongSelector = function(){
-  $('#instructions').removeClass('show');
+  $('#intro').removeClass('show');
   $('#song-selector').addClass('show');
 
   var audio = $('#audio-clips').find('audio')[0];
@@ -104,16 +104,24 @@ var startCountdown = function(){
 
   $('#song-selector').removeClass('show');
   $('#countdown').addClass('show');
-  
+
   socket.emit('prep-stage');
 
   var video = $('#countdown').find('video')[0];
   video.onended = function(e) {
     socket.emit('rock-out');
 
+    $('#countdown').removeClass('show');
+    $('#rock-out').addClass('show');
+
     setTimeout(function(){
+
+      $('#rock-out').removeClass('show');
+      $('#done').addClass('show');
+
       fadeOut(selectedAudio, 500, function(){
         socket.emit('clean-stage');
+
         location.reload();
       });
     }, 15000);

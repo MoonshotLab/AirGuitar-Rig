@@ -24,12 +24,33 @@ section.screen.show{
 }
 
 
+/* Intro */
+section#intro{
+  background: url('/home-screen.png') no-repeat center center;
+  background-size: contain;
+}
+
 
 /* Countdown */
 section.screen#countdown video{
   width: 100%;
 }
 
+
+
+/* Rock Out */
+section#rock-out{
+  background: url('/rock-out.png') no-repeat center center;
+  background-size: contain;
+}
+
+
+
+/* Rock Out */
+section#done{
+  background: url('/end-share.png') no-repeat center center;
+  background-size: contain;
+}
 
 
 /* Song Selection */
