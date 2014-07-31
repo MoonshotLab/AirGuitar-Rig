@@ -98,9 +98,8 @@ var selectSong = function(){
 
 var startCountdown = function(){
   // Fade in the selected song
-  selectedAudio.volume = 0;
+  selectedAudio.volume = 0.3;
   selectedAudio.play();
-  fadeIn(selectedAudio, 1000);
 
   $('#song-selector').removeClass('show');
   $('#countdown').addClass('show');
@@ -109,30 +108,35 @@ var startCountdown = function(){
 
   var video = $('#countdown').find('video')[0];
   video.onended = function(e) {
+    fadeIn(selectedAudio, 100);
     socket.emit('rock-out');
 
     $('#countdown').removeClass('show');
     $('#rock-out').addClass('show');
 
     setTimeout(function(){
-
       $('#rock-out').removeClass('show');
       $('#done').addClass('show');
 
-      fadeOut(selectedAudio, 500, function(){
+      fadeOut(selectedAudio, 250, function(){
         socket.emit('clean-stage');
-
         location.reload();
       });
     }, 15000);
   };
+
   video.play();
 };
 
 
 
 var socket = io();
-socket.on('select-song', selectSong);
+socket.on('select-song', function(){
+  if($('section.screen.show').attr('id') == 'intro')
+    showSongSelector();
+  else
+    selectSong();
+});
 socket.on('next-song', function(){
   if($('section.screen.show').attr('id') == 'intro')
     showSongSelector();
