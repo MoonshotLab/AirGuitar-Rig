@@ -10,6 +10,12 @@ html, body{
 }
 
 
+
+video{
+  width: 100%;
+}
+
+
 section.screen{
   top: 0;
   left: 0;
@@ -29,13 +35,6 @@ section#intro{
   background: url('/home-screen.png') no-repeat center center;
   background-size: contain;
 }
-
-
-/* Countdown */
-section.screen#countdown video{
-  width: 100%;
-}
-
 
 
 /* Rock Out */

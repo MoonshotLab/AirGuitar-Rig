@@ -8,10 +8,6 @@ var gopro = null;
 
 var prepStage = function(){
   phidget.switchFans('on');
-
-  setTimeout(function(){
-    phidget.switchLights('on');
-  }, 9000);
 };
 
 
@@ -22,18 +18,23 @@ var cleanStage = function(){
 
 
 var triggerSequence = function(){
+  phidget.switchLights('on');
   db.getNextShortCode().then(function(shortCode){
     phidget.setIndicator('recording');
-    gopro.capture(shortCode, 4000)
-      .then(function(){
-        phidget.setIndicator('uploading');
-        S3.rememberSlowmo(shortCode)
-          .then(db.storeSlowmo)
-          .then(hooks.notifySlowmo)
-          .then(gopro.deleteCaptures)
-          .then(reset)
-          .fail(handleError);
-      });
+
+    // Wait just a few seconds before we start recording
+    setTimeout(function(){
+      gopro.capture(shortCode, 4000)
+        .then(function(){
+          phidget.setIndicator('uploading');
+          S3.rememberSlowmo(shortCode)
+            .then(db.storeSlowmo)
+            .then(hooks.notifySlowmo)
+            .then(gopro.deleteCaptures)
+            .then(reset)
+            .fail(handleError);
+        });
+    }, 2000);
   });
 };
 
@@ -42,6 +43,7 @@ var reset = function(){
   console.log('resetting...');
   cleanStage();
   phidget.setIndicator('ready');
+  web.restartInterface();
 };
 
 

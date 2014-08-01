@@ -89,40 +89,39 @@ var selectSong = function(){
       selectedAudio.pause();
       selectedAudio.currentTime = 0;
 
-      setTimeout(startCountdown, 250);
+      setTimeout(startVideo, 250);
     });
   }
 };
 
 
 
-var startCountdown = function(){
+var startVideo = function(){
   // Fade in the selected song
   selectedAudio.volume = 0.3;
   selectedAudio.play();
 
   $('#song-selector').removeClass('show');
-  $('#countdown').addClass('show');
+  $('#video').addClass('show');
 
   socket.emit('prep-stage');
+  var video = $('#video').find('video')[0];
 
-  var video = $('#countdown').find('video')[0];
-  video.onended = function(e) {
+  // Wait for countdown to end, then turn on lights
+  // and start recording
+  setTimeout(function(){
     fadeIn(selectedAudio, 100);
     socket.emit('rock-out');
+  }, 8000);
 
-    $('#countdown').removeClass('show');
-    $('#rock-out').addClass('show');
-
-    setTimeout(function(){
-      $('#rock-out').removeClass('show');
-      $('#done').addClass('show');
-
-      fadeOut(selectedAudio, 250, function(){
-        socket.emit('clean-stage');
-        location.reload();
-      });
-    }, 15000);
+  // When video done, clean up stage and
+  // show social screen
+  video.onended = function(e) {
+    $('#video').removeClass('show');
+    $('#done').addClass('show');
+    fadeOut(selectedAudio, 350, function(){
+      socket.emit('clean-stage');
+    });
   };
 
   video.play();
@@ -131,15 +130,18 @@ var startCountdown = function(){
 
 
 var socket = io();
+
 socket.on('select-song', function(){
-  if($('section.screen.show').attr('id') == 'intro')
-    showSongSelector();
-  else
+  if($('section.screen.show').attr('id') != 'intro')
     selectSong();
 });
+
 socket.on('next-song', function(){
   if($('section.screen.show').attr('id') == 'intro')
     showSongSelector();
-  else
-    nextSong();
+  else nextSong();
+});
+
+socket.on('restart-interface', function(){
+  location.reload();
 });
