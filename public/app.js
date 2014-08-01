@@ -139,7 +139,8 @@ socket.on('select-song', function(){
 socket.on('next-song', function(){
   if($('section.screen.show').attr('id') == 'intro')
     showSongSelector();
-  else nextSong();
+  else if($('section.screen.show').attr('id') == 'song-selector')
+    nextSong();
 });
 
 socket.on('restart-interface', function(){
