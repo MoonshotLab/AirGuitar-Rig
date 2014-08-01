@@ -12,12 +12,8 @@ var optimize = function(shortCode){
     .then(makeSlowmo)
     .then(encodeAsWebm)
     .then(capturePoster)
-    .fail(function(e){
-      console.log(e);
-    })
-    .done(function(x){
-      console.log(x);
-    });
+    .fail(deferred.reject)
+    .done(deferred.resolve);
 
   return deferred.promise;
 };
