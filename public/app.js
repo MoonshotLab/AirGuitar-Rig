@@ -112,7 +112,7 @@ var startVideo = function(){
   setTimeout(function(){
     fadeIn(selectedAudio, 100);
     socket.emit('rock-out');
-  }, 8000);
+  }, 9000);
 
   // When video done, clean up stage and
   // show social screen

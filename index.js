@@ -41,7 +41,7 @@ var triggerSequence = function(){
               // The webm takes a while to convert
               // Just do it and forget about it
               video.encodeAsWebm(shortCode)
-                .then(remeberWebm);
+                .then(S3.remeberWebm);
 
               // Store everything besides the webm
               S3.rememberSlowmo(shortCode)

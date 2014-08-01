@@ -1,4 +1,5 @@
 var Q = require('q');
+var _ = require('underscore');
 var MongoClient = require('mongodb').MongoClient;
 var client = null;
 
@@ -30,9 +31,14 @@ var getNextShortCode = function(){
     .sort({ _id : 1 })
     .toArray(
       function(err, results){
-        if(err) deferred.reject(results);
-        else {
-          var currentMax = parseInt(results[results.length - 1].shortCode);
+        if(err){
+          // just fulfill it please
+          deferred.resolve(rando(500, 10000).toString());
+        } else {
+          var maxRecord = _.max(results, function(result){
+            return parseInt(result.shortCode);
+          });
+          var currentMax = parseInt(maxRecord.shortCode);
           var shortCode = padNumber(currentMax+1, 5);
           deferred.resolve(shortCode);
         }
@@ -80,6 +86,11 @@ var padNumber = function(num, size){
   var s = num+"";
   while (s.length < size) s = "0" + s;
   return s;
+};
+
+
+var rando = function(min, max){
+  return Math.floor(Math.random()*(max-min+1)+min);
 };
 
 
