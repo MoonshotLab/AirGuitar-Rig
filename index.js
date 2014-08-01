@@ -3,6 +3,7 @@ var web = require('./libs/web');
 var S3 = require('./libs/S3');
 var db = require('./libs/db');
 var hooks = require('./libs/hooks');
+var video = require('./libs/video');
 var gopro = null;
 
 
@@ -19,6 +20,7 @@ var cleanStage = function(){
 
 var triggerSequence = function(){
   phidget.switchLights('on');
+
   db.getNextShortCode().then(function(shortCode){
     phidget.setIndicator('recording');
 
@@ -26,13 +28,27 @@ var triggerSequence = function(){
     setTimeout(function(){
       gopro.capture(shortCode, 4000)
         .then(function(){
-          phidget.setIndicator('uploading');
-          S3.rememberSlowmo(shortCode)
-            .then(db.storeSlowmo)
-            .then(hooks.notifySlowmo)
-            .then(gopro.deleteCaptures)
-            .then(reset)
-            .fail(handleError);
+
+          // Delete everyting on the camera then tell 'em
+          // we're ready
+          gopro.deleteCaptures()
+            .then(reset);
+
+          // "Optimize" the videos
+          video.optimize(shortCode)
+            .then(function(){
+
+              // The webm takes a while to convert
+              // Just do it and forget about it
+              video.encodeAsWebm(shortCode)
+                .then(remeberWebm);
+
+              // Store everything besides the webm
+              S3.rememberSlowmo(shortCode)
+                .then(db.storeSlowmo)
+                .then(hooks.notifySlowmo)
+                .fail(handleError);
+            });
         });
     }, 2000);
   });

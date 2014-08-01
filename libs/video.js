@@ -10,7 +10,6 @@ var optimize = function(shortCode){
   stripAudio({shortCode: shortCode, file: file})
     .then(cropClip)
     .then(makeSlowmo)
-    .then(encodeAsWebm)
     .then(capturePoster)
     .fail(deferred.reject)
     .done(deferred.resolve);
@@ -80,19 +79,19 @@ var makeSlowmo = function(opts){
 
 
 
-var encodeAsWebm = function(opts){
+var encodeAsWebm = function(shortCode){
   var deferred = Q.defer();
-  var webmPath = path.join(process.cwd(), 'tmp/') + opts.shortCode + '.webm';
-  var args = ['-i', opts.file, '-codec:v', 'libvpx', '-b', '1500k', '-codec:a', 'libvorbis', webmPath, '-y'];
+  var originalFile = path.join(process.cwd(), 'tmp/') + shortCode + '.mp4';
+  var webmPath = path.join(process.cwd(), 'tmp/') + shortCode + '.webm';
+
+  var args = ['-i', originalFile, '-codec:v', 'libvpx', '-b', '1500k', '-codec:a', 'libvorbis', webmPath, '-y'];
 
   var ffmpeg = spawn('ffmpeg', args);
   console.log('encoding as webm...');
 
   ffmpeg.on('exit', function(){
     console.log('encoded as webm...');
-    opts.webm = webmPath;
-
-    deferred.resolve(opts);
+    deferred.resolve(shortCode);
   });
 
   return deferred.promise;
@@ -119,4 +118,5 @@ var capturePoster = function(opts){
 };
 
 
+exports.encodeAsWebm = encodeAsWebm;
 exports.optimize = optimize;

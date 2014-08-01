@@ -1,6 +1,7 @@
 var Q = require('q');
 var path = require('path');
 var knox = require('knox');
+var s3Base = 'https://s3.amazonaws.com/air-guitar/';
 
 var s3Client = knox.createClient({
   key: process.env.S3_KEY,
@@ -14,25 +15,29 @@ var rememberSlowmo = function(shortCode){
 
   var fileBase = path.join(process.cwd(), 'tmp/') + shortCode;
   var mp4 = fileBase + '.mp4';
-  var webm = fileBase + '.webm';
   var poster = fileBase + '.jpg';
-  var s3Base = 'https://s3.amazonaws.com/air-guitar/';
   var remotePath = '/' + shortCode + '.mp4';
 
   store(mp4, '/' + shortCode + '.mp4', function(){
-    store(webm, '/' + shortCode + '.webm', function(){
-      store(poster, '/' + shortCode + '.jpg', function(){
-        deferred.resolve({
-          shortCode: shortCode,
-          mp4: s3Base + shortCode + '.mp4',
-          webm: s3Base + shortCode + '.webm',
-          poster: s3Base + shortCode + '.jpg'
-        });
+    store(poster, '/' + shortCode + '.jpg', function(){
+      deferred.resolve({
+        shortCode: shortCode,
+        mp4: s3Base + shortCode + '.mp4',
+        webm: s3Base + shortCode + '.webm',
+        poster: s3Base + shortCode + '.jpg'
       });
     });
   });
 
   return deferred.promise;
+};
+
+
+var remeberWebm = function(shortCode){
+  var localFile = path.join(process.cwd(), 'tmp/') + shortCode + '.webm';
+  var relativePath = '/' + shortCode + '.webm';
+
+  store(localFile, relativePath);
 };
 
 
@@ -47,3 +52,4 @@ var store = function(fileToSave, relativeS3Path, next){
 
 exports.rememberSlowmo = rememberSlowmo;
 exports.client = s3Client;
+exports.remeberWebm = remeberWebm;

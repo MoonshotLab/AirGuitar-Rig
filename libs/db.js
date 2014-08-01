@@ -59,24 +59,6 @@ var getAllSlowmos = function(){
 };
 
 
-var updateSlowmoWithWebM = function(shortCode, webmPath){
-  var deferred = Q.defer();
-
-  slowmos.update(
-    { shortCode : shortCode },
-    { $set: { webm: webmPath } },
-    function(err, res){
-      if(err) deferred.reject(err);
-      deferred.resolve(shortCode);
-    }
-  );
-
-  console.log('updating slowmo in database...');
-
-  return deferred.promise;
-};
-
-
 var storeSlowmo = function(obj){
   var deferred = Q.defer();
   obj.preferred = false;
@@ -105,7 +87,6 @@ exports.connect = connect;
 exports.storeSlowmo = storeSlowmo;
 exports.getNextShortCode = getNextShortCode;
 exports.getAllSlowmos = getAllSlowmos;
-exports.updateSlowmoWithWebM = updateSlowmoWithWebM;
 exports.client = function(){
   return client;
 };
