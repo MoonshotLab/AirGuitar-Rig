@@ -11,13 +11,24 @@ var s3Client = knox.createClient({
 
 var rememberSlowmo = function(shortCode){
   var deferred = Q.defer();
-  var filePath = path.join(process.cwd(), 'tmp/') + shortCode + '.mp4';
+
+  var fileBase = path.join(process.cwd(), 'tmp/') + shortCode;
+  var mp4 = fileBase + '.mp4';
+  var webm = fileBase + '.webm';
+  var poster = fileBase + '.jpg';
+  var s3Base = 'https://s3.amazonaws.com/air-guitar/';
   var remotePath = '/' + shortCode + '.mp4';
 
-  store(filePath, remotePath, function(s3Path){
-    deferred.resolve({
-      shortCode: shortCode,
-      url: s3Path
+  store(mp4, '/' + shortCode + '.mp4', function(){
+    store(webm, '/' + shortCode + '.webm', function(){
+      store(poster, '/' + shortCode + '.jpg', function(){
+        deferred.resolve({
+          shortCode: shortCode,
+          mp4: s3Base + shortCode + '.mp4',
+          webm: s3Base + shortCode + '.webm',
+          poster: s3Base + shortCode + '.jpg'
+        });
+      });
     });
   });
 
@@ -29,9 +40,10 @@ var store = function(fileToSave, relativeS3Path, next){
   console.log('storing', fileToSave, 'in S3...');
   s3Client.putFile(fileToSave, relativeS3Path, function(err, res){
     if(err) console.log('error storing file...', err);
-    else next('https://s3.amazonaws.com/air-guitar' + relativeS3Path);
+    if(next) next();
   });
 };
 
 
 exports.rememberSlowmo = rememberSlowmo;
+exports.client = s3Client;

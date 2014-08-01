@@ -83,7 +83,7 @@ var makeSlowmo = function(opts){
 var encodeAsWebm = function(opts){
   var deferred = Q.defer();
   var webmPath = path.join(process.cwd(), 'tmp/') + opts.shortCode + '.webm';
-  var args = ['-i', opts.file, '-codec:v', 'libvpx', '-quality', 'good', '-codec:a', 'libvorbis', webmPath, '-y'];
+  var args = ['-i', opts.file, '-codec:v', 'libvpx', '-b', '1500k', '-codec:a', 'libvorbis', webmPath, '-y'];
 
   var ffmpeg = spawn('ffmpeg', args);
   console.log('encoding as webm...');
@@ -111,8 +111,6 @@ var capturePoster = function(opts){
   ffmpeg.on('exit', function(){
     console.log('wrote thumbnail...');
     deferred.resolve({
-      poster: posterPath,
-      video: opts.file,
       shortCode: opts.shortCode
     });
   });

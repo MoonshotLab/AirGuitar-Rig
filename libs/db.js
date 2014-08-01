@@ -1,6 +1,6 @@
 var Q = require('q');
 var MongoClient = require('mongodb').MongoClient;
-
+var client = null;
 
 var slowmos = null;
 
@@ -9,6 +9,7 @@ var connect = function(){
   console.log('connecting to db...');
 
   MongoClient.connect(process.env.DB_CONNECT, function(err, db){
+    client = db;
     if(err) console.log('error connecting to db...', err);
     else console.log('connected to db...');
 
@@ -42,13 +43,49 @@ var getNextShortCode = function(){
 };
 
 
+var getAllSlowmos = function(){
+  var deferred = Q.defer();
+
+  slowmos
+    .find()
+    .toArray(
+      function(err, results){
+        if(err) deferred.reject(results);
+        else deferred.resolve(results.reverse());
+      }
+    );
+
+  return deferred.promise;
+};
+
+
+var updateSlowmoWithWebM = function(shortCode, webmPath){
+  var deferred = Q.defer();
+
+  slowmos.update(
+    { shortCode : shortCode },
+    { $set: { webm: webmPath } },
+    function(err, res){
+      if(err) deferred.reject(err);
+      deferred.resolve(shortCode);
+    }
+  );
+
+  console.log('updating slowmo in database...');
+
+  return deferred.promise;
+};
+
+
 var storeSlowmo = function(obj){
   var deferred = Q.defer();
+  obj.preferred = false;
 
   console.log('saving slowmo in database...');
   slowmos.insert(
     obj,
     function(err, res){
+      if(err) deferred.reject(err);
       deferred.resolve(obj.shortCode);
     }
   );
@@ -67,3 +104,8 @@ var padNumber = function(num, size){
 exports.connect = connect;
 exports.storeSlowmo = storeSlowmo;
 exports.getNextShortCode = getNextShortCode;
+exports.getAllSlowmos = getAllSlowmos;
+exports.updateSlowmoWithWebM = updateSlowmoWithWebM;
+exports.client = function(){
+  return client;
+};
