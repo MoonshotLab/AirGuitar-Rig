@@ -1,12 +1,14 @@
 # Air Guitar Rig
-A slowmo camera rig which allows a user to select a song from a library and then captures a few seconds of video. Videos are saved to S3, a new remote db record is created, and the [Air Guitar companion web app](https://github.com/joelongstreet/AirGuitar-Web) will be notified.
+A slowmo camera rig which allows a user to select a song from a library and then captures a few seconds of video. Videos are modified, saved to S3, a new remote db record is created, and the [Air Guitar companion web app](https://github.com/joelongstreet/AirGuitar-Web) will be notified.
 
 To start the app you'll need to have the following:
 1. The correct wifi and ethernet connections
-1. A connected GoPro with the proper settings
-1. A running phidget web server
-1. A phidget with the correct wiring
-1. The correct environment variables to connect to S3, a remote MongoDB, GoPro, and a post hook secret.
+2. A connected GoPro with the proper settings
+3. A running phidget web server
+4. A phidget with the correct wiring
+5. The correct environment variables to connect to S3, a remote MongoDB, GoPro, and a post hook secret.
+6. All node modules installed
+7. FFMPEG with libvx, libvorbis, libx264 - `brew install ffmpeg --with-libvpx --with-libvorbis --with-libx264`
 
 
 ## Setting up the GoPro
@@ -14,9 +16,9 @@ The easiest (and possibly only) way to communicate with the GoPro is via it's we
 
 ### Settings:
 * Wireless Controls - WiFi RC, Current
-* Res: WVGA
-* FPS: 240
-* FOV: Wide
+* Res: 720p
+* FPS: 120
+* FOV: Narrow
 
 Make sure to put the camera into video mode before starting the app. The app will then be able to just start recording.
 
