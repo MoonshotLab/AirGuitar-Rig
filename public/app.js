@@ -110,18 +110,18 @@ var startVideo = function(){
   // Wait for countdown to end, then turn on lights
   // and start recording
   setTimeout(function(){
-    fadeIn(selectedAudio, 100);
+    fadeIn(selectedAudio, 30);
     socket.emit('rock-out');
   }, 9000);
 
   // When video done, clean up stage and
   // show social screen
   video.onended = function(e) {
+    socket.emit('clean-stage');
+
     $('#video').removeClass('show');
     $('#done').addClass('show');
-    fadeOut(selectedAudio, 350, function(){
-      socket.emit('clean-stage');
-    });
+    fadeOut(selectedAudio, 150);
   };
 
   video.play();
