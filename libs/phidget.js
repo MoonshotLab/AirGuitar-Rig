@@ -1,14 +1,14 @@
 var pinMapping = {
-  'fan' : 5,
-  'lights' : 7,
+  'fan' : 0,
+  'lights' : 1,
   'buttons': {
-    'next' : 1,
-    'prev' : 4
+    'next' : 7,
+    'prev' : 6,
+    'delete': 0
   },
   'indicators' : {
-    'ready' : 3,
-    'recording' : 2,
-    'uploading' : 1
+    'ready' : 6,
+    'busy' : 7
   }
 };
 
@@ -36,10 +36,14 @@ phidget.on('error', function(error){
 phidget.on('input', function(boardId, inputId, state){
   var buttons = pinMapping.buttons;
 
+  console.log(buttons, inputId);
+
   if(inputId == buttons.next && state == 1 && phidgetConnected === true)
     emitter.emit('next-song');
   else if(inputId === buttons.prev && state == 1 && phidgetConnected === true)
     emitter.emit('select-song');
+  else if(inputId == buttons.delete && state == 1 && phidgetConnected === true)
+    emitter.emit('delete-captures');
 });
 
 

@@ -23,7 +23,6 @@ var triggerSequence = function(){
 
   db.getNextShortCode().then(function(shortCode){
     db.storeSlowmo(shortCode);
-    phidget.setIndicator('recording');
 
     // Wait just a few seconds before we start recording
     setTimeout(function(){
@@ -50,16 +49,18 @@ var triggerSequence = function(){
 };
 
 
-var reset = function(){
-  console.log('resetting...');
-  cleanStage();
-  phidget.setIndicator('ready');
+var deleteCaptures = function(){
+  phidget.setIndicator('busy');
+
+  gopro.deleteCaptures().then(function(){
+    console.log('all done');
+    phidget.setIndicator('ready');
+  });
 };
 
 
 var handleError = function(e){
   console.log(e);
-  phidget.setIndicator('error');
 };
 
 
@@ -70,7 +71,6 @@ var connect = function(){
       gopro.connect()
         .then(function(){
           console.log('All Systems Ready...');
-          reset();
         });
     })
     .fail(function(e){
@@ -85,4 +85,5 @@ web.events.on('rock-out', triggerSequence);
 
 phidget.events.on('next-song', web.nextSong);
 phidget.events.on('select-song', web.selectSong);
+phidget.events.on('delete-captures', deleteCaptures);
 phidget.events.on('ready', connect);
