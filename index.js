@@ -53,7 +53,6 @@ var deleteCaptures = function(){
   phidget.setIndicator('busy');
 
   gopro.deleteCaptures().then(function(){
-    console.log('all done');
     phidget.setIndicator('ready');
   });
 };
@@ -70,6 +69,7 @@ var connect = function(){
       gopro = require('./libs/gopro');
       gopro.connect()
         .then(function(){
+          phidget.setIndicator('ready');
           console.log('All Systems Ready...');
         });
     })
