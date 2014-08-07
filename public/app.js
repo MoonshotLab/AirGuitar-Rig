@@ -1,4 +1,3 @@
-var isRecording = false;
 var myAudio = null;
 var mySong = null;
 
@@ -75,8 +74,7 @@ var nextSong = function(){
 
 
 var selectSong = function(){
-  if(!isRecording){
-    isRecording = true;
+  if(!mySong){
 
     // Find the Selected Audio
     var index = $('#song-selector').find('.song').index('.selected');
@@ -139,8 +137,7 @@ var startVideo = function(){
 var socket = io();
 
 socket.on('select-song', function(){
-  if($('section.screen.show').attr('id') != 'intro')
-    selectSong();
+  if(!mySong) selectSong();
 });
 
 socket.on('next-song', function(){
