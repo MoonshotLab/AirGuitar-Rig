@@ -122,6 +122,10 @@ var startVideo = function(){
     $('#video').removeClass('show');
     $('#done').addClass('show');
     fadeOut(selectedAudio, 150);
+
+    setTimeout(function(){
+      location.reload();
+    }, 5000);
   };
 
   video.play();
@@ -141,8 +145,4 @@ socket.on('next-song', function(){
     showSongSelector();
   else if($('section.screen.show').attr('id') == 'song-selector')
     nextSong();
-});
-
-socket.on('restart-interface', function(){
-  location.reload();
 });

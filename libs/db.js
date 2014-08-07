@@ -1,6 +1,7 @@
 var Q = require('q');
 var _ = require('underscore');
 var MongoClient = require('mongodb').MongoClient;
+var s3Base = 'https://s3.amazonaws.com/air-guitar/';
 var client = null;
 
 var slowmos = null;
@@ -35,11 +36,17 @@ var getNextShortCode = function(){
           // just fulfill it please
           deferred.resolve(rando(500, 10000).toString());
         } else {
-          var maxRecord = _.max(results, function(result){
-            return parseInt(result.shortCode);
-          });
-          var currentMax = parseInt(maxRecord.shortCode);
-          var shortCode = padNumber(currentMax+1, 5);
+          var shortCode = padNumber(0, 5);
+
+          if(results.length !== 0){
+            var maxRecord = _.max(results, function(result){
+              return parseInt(result.shortCode);
+            });
+
+            var currentMax = parseInt(maxRecord.shortCode);
+            shortCode = padNumber(currentMax+1, 5);
+          }
+
           deferred.resolve(shortCode);
         }
       }
@@ -65,16 +72,20 @@ var getAllSlowmos = function(){
 };
 
 
-var storeSlowmo = function(obj){
+var storeSlowmo = function(shortCode){
   var deferred = Q.defer();
-  obj.preferred = false;
 
   console.log('saving slowmo in database...');
   slowmos.insert(
-    obj,
+    {
+      shortCode: shortCode,
+      mp4: s3Base + shortCode + '.mp4',
+      webm: s3Base + shortCode + '.webm',
+      poster: s3Base + shortCode + '.jpg'
+    },
     function(err, res){
       if(err) deferred.reject(err);
-      deferred.resolve(obj.shortCode);
+      deferred.resolve(shortCode);
     }
   );
 

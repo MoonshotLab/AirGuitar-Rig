@@ -43,9 +43,4 @@ exports.nextSong = function(){
 };
 
 
-exports.restartInterface = function(){
-  io.sockets.emit('restart-interface');
-};
-
-
 exports.events = emitter;

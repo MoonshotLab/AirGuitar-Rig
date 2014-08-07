@@ -1,7 +1,6 @@
 var Q = require('q');
 var path = require('path');
 var knox = require('knox');
-var s3Base = 'https://s3.amazonaws.com/air-guitar/';
 
 var s3Client = knox.createClient({
   key: process.env.S3_KEY,
@@ -20,12 +19,7 @@ var rememberSlowmo = function(shortCode){
 
   store(mp4, '/' + shortCode + '.mp4', function(){
     store(poster, '/' + shortCode + '.jpg', function(){
-      deferred.resolve({
-        shortCode: shortCode,
-        mp4: s3Base + shortCode + '.mp4',
-        webm: s3Base + shortCode + '.webm',
-        poster: s3Base + shortCode + '.jpg'
-      });
+      deferred.resolve(shortCode);
     });
   });
 

@@ -22,17 +22,13 @@ var triggerSequence = function(){
   phidget.switchLights('on');
 
   db.getNextShortCode().then(function(shortCode){
+    db.storeSlowmo(shortCode);
     phidget.setIndicator('recording');
 
     // Wait just a few seconds before we start recording
     setTimeout(function(){
       gopro.capture(shortCode, 4000)
         .then(function(){
-
-          // Delete everyting on the camera then tell 'em
-          // we're ready
-          gopro.deleteCaptures()
-            .then(reset);
 
           // "Optimize" the videos
           video.optimize(shortCode)
@@ -45,7 +41,6 @@ var triggerSequence = function(){
 
               // Store everything besides the webm
               S3.rememberSlowmo(shortCode)
-                .then(db.storeSlowmo)
                 .then(hooks.notifySlowmo)
                 .fail(handleError);
             });
@@ -59,7 +54,6 @@ var reset = function(){
   console.log('resetting...');
   cleanStage();
   phidget.setIndicator('ready');
-  web.restartInterface();
 };
 
 
