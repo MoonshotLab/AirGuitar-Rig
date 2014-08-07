@@ -46,7 +46,7 @@ var buildSongTemplates = function(){
     klass += ' ' + song.selector;
 
     var songTemplate = [
-      '<div class="song ' + klass + '">',
+      '<div class="song ' + klass + '" data-title="' + song.title + '">',
       '</div>'
     ].join('');
 

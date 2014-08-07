@@ -1,5 +1,7 @@
 var isRecording = false;
-var selectedAudio = null;
+var myAudio = null;
+var mySong = null;
+
 
 $(function(){
   buildSongTemplates();
@@ -78,16 +80,17 @@ var selectSong = function(){
 
     // Find the Selected Audio
     var index = $('#song-selector').find('.song').index('.selected');
-    selectedAudio = $('#audio-clips').find('audio')[index];
+    myAudio = $('#audio-clips').find('audio')[index];
+    mySong = $('#song-selector').find('.selected').data('title');
 
     // Highlight the Interface Song
     var $selectedSong = $($('#song-selector').find('.song')[index]);
     $selectedSong.addClass('select');
 
     // Fade it out, cause it's prolly playing
-    fadeOut(selectedAudio, 100, function(){
-      selectedAudio.pause();
-      selectedAudio.currentTime = 0;
+    fadeOut(myAudio, 100, function(){
+      myAudio.pause();
+      myAudio.currentTime = 0;
 
       setTimeout(startVideo, 250);
     });
@@ -98,8 +101,8 @@ var selectSong = function(){
 
 var startVideo = function(){
   // Fade in the selected song
-  selectedAudio.volume = 0.3;
-  selectedAudio.play();
+  myAudio.volume = 0.3;
+  myAudio.play();
 
   $('#song-selector').removeClass('show');
   $('#video').addClass('show');
@@ -110,8 +113,8 @@ var startVideo = function(){
   // Wait for countdown to end, then turn on lights
   // and start recording
   setTimeout(function(){
-    fadeIn(selectedAudio, 30);
-    socket.emit('rock-out');
+    fadeIn(myAudio, 30);
+    socket.emit('rock-out', { song: mySong });
   }, 9000);
 
   // When video done, clean up stage and
@@ -121,7 +124,7 @@ var startVideo = function(){
 
     $('#video').removeClass('show');
     $('#done').addClass('show');
-    fadeOut(selectedAudio, 150);
+    fadeOut(myAudio, 150);
 
     setTimeout(function(){
       location.reload();

@@ -5,6 +5,7 @@ var s3Base = 'https://s3.amazonaws.com/air-guitar/';
 var client = null;
 
 var slowmos = null;
+var analytics = null;
 
 var connect = function(){
   var deferred = Q.defer();
@@ -16,11 +17,23 @@ var connect = function(){
     else console.log('connected to db...');
 
     slowmos = db.collection('slowmos');
+    analytics = db.collection('analytics');
 
     deferred.resolve();
   });
 
   return deferred.promise;
+};
+
+
+var saveSong = function(shortCode, song){
+  analytics.insert(
+    {
+      shortCode: shortCode,
+      songName: song
+    },
+    function(err, res){}
+  );
 };
 
 
@@ -109,6 +122,7 @@ exports.connect = connect;
 exports.storeSlowmo = storeSlowmo;
 exports.getNextShortCode = getNextShortCode;
 exports.getAllSlowmos = getAllSlowmos;
+exports.saveSong = saveSong;
 exports.client = function(){
   return client;
 };

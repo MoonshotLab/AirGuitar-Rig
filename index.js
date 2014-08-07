@@ -18,10 +18,11 @@ var cleanStage = function(){
 };
 
 
-var triggerSequence = function(){
+var triggerSequence = function(song){
   phidget.switchLights('on');
 
   db.getNextShortCode().then(function(shortCode){
+    db.saveSong(shortCode, song);
     db.storeSlowmo(shortCode);
 
     // Wait just a few seconds before we start recording

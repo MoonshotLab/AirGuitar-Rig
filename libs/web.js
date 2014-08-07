@@ -16,8 +16,8 @@ io.on('connection', function(socket){
   socket.on('clean-stage', function(){
     emitter.emit('clean-stage');
   });
-  socket.on('rock-out', function(){
-    emitter.emit('rock-out');
+  socket.on('rock-out', function(data){
+    emitter.emit('rock-out', data.song);
   });
 });
 

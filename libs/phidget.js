@@ -36,8 +36,6 @@ phidget.on('error', function(error){
 phidget.on('input', function(boardId, inputId, state){
   var buttons = pinMapping.buttons;
 
-  console.log(buttons, inputId);
-
   if(inputId == buttons.next && state == 1 && phidgetConnected === true)
     emitter.emit('next-song');
   else if(inputId === buttons.prev && state == 1 && phidgetConnected === true)
